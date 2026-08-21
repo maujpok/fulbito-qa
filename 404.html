@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Página no encontrada — Fulbito</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0F172A">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<script>
+  // GitHub Pages no puede servir rutas dinámicas: /invite/{token} cae acá.
+  // Lo mandamos a la página de invitación conservando el token.
+  (function () {
+    var m = location.pathname.match(/^\/invite\/([^\/?#]+)\/?$/);
+    if (m) location.replace('/invite/?t=' + m[1] + location.search.replace('?', '&'));
+  })();
+</script>
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  .notfound {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 40px 22px;
+    background:
+      radial-gradient(90% 70% at 50% 0%, rgba(22, 163, 74, .22), transparent 62%),
+      linear-gradient(168deg, #0A1628, #0F172A 50%, #082011);
+  }
+  .notfound img { margin: 0 auto 26px; border-radius: 22px; }
+  .notfound h1 { font-size: clamp(2rem, 6vw, 3rem); margin-bottom: 14px; }
+  .notfound p { color: var(--text-soft); max-width: 46ch; margin: 0 auto 30px; }
+</style>
+</head>
+<body>
+  <main class="notfound">
+    <div>
+      <img src="/assets/logo.svg" alt="Fulbito" width="88" height="88">
+      <h1>La pelota se fue afuera</h1>
+      <p>Esta página no existe. Volvé al inicio y sumate como Capitán Fundador para entrar con tu grupo antes que nadie.</p>
+      <a class="btn btn-primary" href="/#sumarme">Volver al inicio</a>
+    </div>
+  </main>
+</body>
+</html>
