@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Te invitaron a un grupo en Fulbito</title>
+<meta name="description" content="Sumate al grupo que te invitó y organizá los partidos sin el caos de WhatsApp.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F172A">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fulbito">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Te invitaron a un grupo en Fulbito">
+<meta property="og:description" content="Sumate al grupo, confirmá si jugás y enterate de cada partido sin buscar la lista en el chat.">
+<meta property="og:image" content="https://www.fulbito.tech/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/invite/invite.css">
+</head>
+<body>
+
+<header class="top">
+  <img src="/assets/logotipo-claro.png" alt="Fulbito" width="103" height="32">
+  <span class="env" id="env-badge" hidden>QA</span>
+</header>
+
+<main class="shell">
+
+  <!-- Estado: resolviendo la invitación -->
+  <section class="card" id="state-loading" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="state-msg">Buscando la invitación…</p>
+  </section>
+
+  <!-- Estado: invitación válida -->
+  <section class="card" id="state-ok" hidden>
+    <p class="eyebrow">Unite a la experiencia Fulbito</p>
+
+    <div class="crest" id="inv-crest" aria-hidden="true">FC</div>
+    <h1 class="group-name" id="inv-group">—</h1>
+    <p class="host"><strong id="inv-host">—</strong> te invitó a sumarte al grupo</p>
+
+    <ul class="meta" id="inv-meta"></ul>
+
+    <div class="next" id="inv-next" hidden>
+      <p class="next-label">Próximo partido</p>
+      <p class="next-when" id="inv-next-when">—</p>
+      <p class="next-where" id="inv-next-where">—</p>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" type="button" id="btn-open">Sumarme al grupo</button>
+      <a class="btn btn-ghost" href="/" id="btn-info">¿Qué es Fulbito?</a>
+    </div>
+
+    <div class="stores-note" id="stores-note">
+      <p id="stores-text">¿Todavía no tenés la app? Está por salir; guardamos tu invitación para cuando la instales.</p>
+      <div class="stores">
+        <a class="store" id="store-ios" href="/" aria-label="Próximamente en App Store">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.36 12.68c.02-2.24 1.83-3.32 1.91-3.37-1.04-1.52-2.66-1.73-3.24-1.75-1.38-.14-2.69.81-3.39.81-.7 0-1.78-.79-2.92-.77-1.5.02-2.88.87-3.65 2.21-1.56 2.7-.4 6.7 1.12 8.89.74 1.07 1.63 2.28 2.79 2.24 1.12-.05 1.54-.72 2.9-.72s1.74.72 2.92.7c1.21-.02 1.97-1.1 2.71-2.18.85-1.25 1.2-2.46 1.22-2.52-.03-.01-2.34-.9-2.37-3.54M14.2 5.98c.62-.75 1.03-1.79.92-2.83-.89.04-1.97.59-2.6 1.34-.57.66-1.07 1.72-.94 2.73.99.08 2-.5 2.62-1.24"/></svg>
+          <span><small>Próximamente</small><strong>App Store</strong></span>
+        </a>
+        <a class="store" id="store-android" href="/" aria-label="Próximamente en Google Play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3.61 1.81 13.79 12 3.61 22.19A1.5 1.5 0 0 1 3 20.99V3.01c0-.5.24-.94.61-1.2m10.89 10.89 2.3 2.3-10.94 6.34zm3.42-3.42 2.8 1.63c1.09.62 1.09 1.63 0 2.25l-2.8 1.62-2.55-2.55zM5.86 2.66l10.94 6.33-2.3 2.3z"/></svg>
+          <span><small>Próximamente</small><strong>Google Play</strong></span>
+        </a>
+      </div>
+    </div>
+
+    <p class="code">Código de invitación: <span id="inv-code">—</span></p>
+  </section>
+
+  <!-- Estado: link roto, vencido o inexistente -->
+  <section class="card" id="state-error" hidden>
+    <div class="crest" aria-hidden="true">⚽</div>
+    <h1 class="group-name" id="err-title">Este link no funciona</h1>
+    <p class="host" id="err-text">Puede que esté incompleto o que la invitación haya vencido. Pedile al que te invitó que te mande uno nuevo.</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="/">Conocer Fulbito</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p><a href="/">www.fulbito.tech</a> · El lugar donde tu grupo de fútbol se organiza.</p>
+</footer>
+
+<script src="/invite/invite.js" defer></script>
+</body>
+</html>

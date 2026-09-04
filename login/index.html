@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tu acceso a Fulbito</title>
+<meta name="description" content="Entrá a Fulbito con el enlace que te mandamos por mail.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F172A">
+
+<!-- Sin Open Graph a propósito, y con noindex: esta URL lleva un token de
+     acceso en la query. Una previsualización en WhatsApp o Slack haría que
+     el servidor de la plataforma visite el link antes que la persona. -->
+
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Reusa la hoja de la invitación en vez de duplicarla: son la misma
+     tarjeta y el mismo sistema visual. La razón por la que invite.css no
+     depende de styles.css —cargar lo mínimo en la primera pantalla que ve
+     alguien que llega de afuera— vale igual acá. -->
+<link rel="stylesheet" href="/invite/invite.css">
+</head>
+<body>
+
+<header class="top">
+  <img src="/assets/logotipo-claro.png" alt="Fulbito" width="103" height="32">
+  <span class="env" id="env-badge" hidden>QA</span>
+</header>
+
+<main class="shell">
+
+  <!-- Estado: verificando el enlace -->
+  <section class="card" id="state-loading" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="state-msg">Verificando tu enlace…</p>
+  </section>
+
+  <!-- Estado: enlace válido -->
+  <section class="card" id="state-ok" hidden>
+    <p class="eyebrow">Acceso a Fulbito</p>
+
+    <div class="crest" aria-hidden="true">✉️</div>
+    <h1 class="group-name">Tu enlace es válido</h1>
+    <p class="host">Es para <strong id="login-email">—</strong></p>
+
+    <ul class="meta" id="login-meta"></ul>
+
+    <div class="actions" id="login-actions" hidden>
+      <button class="btn btn-primary" type="button" id="btn-open">Entrar a Fulbito</button>
+    </div>
+
+    <div class="stores-note">
+      <p id="login-hint">
+        Por ahora el ingreso directo desde el enlace no está disponible en la
+        app. Abrí Fulbito y entrá con tu email y contraseña.
+      </p>
+    </div>
+  </section>
+
+  <!-- Estado: enlace vencido, ya usado, o inexistente -->
+  <section class="card" id="state-error" hidden>
+    <div class="crest" aria-hidden="true">⚽</div>
+    <h1 class="group-name" id="err-title">Este enlace no funciona</h1>
+    <p class="host" id="err-text">Puede que esté incompleto o que haya vencido.</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="/">Conocer Fulbito</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p><a href="/">www.fulbito.tech</a> · El lugar donde tu grupo de fútbol se organiza.</p>
+</footer>
+
+<script src="/login/login.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+name: Deploy a GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permisos mínimos que necesita el deploy de Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un solo deploy a la vez; si llega un push nuevo, se encola sin cancelar el actual
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      # La documentación se queda en el repo pero no se publica. Se servía con
+      # 200 y le entregaba a cualquiera la arquitectura, el criterio de scoring
+      # y el estado de la campaña, sin que nada la necesite.
+      #
+      # Solo se borran los .md: brand/ conserva sus PNG, que los emails ya
+      # enviados piden por URL y no se pueden mover.
+      #
+      # `-delete` implica `-depth`, y con `-depth` un `-prune` no hace nada: por
+      # eso .git se excluye con `-not -path`, que sí es un test.
+      - name: Excluir la documentación del artefacto
+        run: find . -name '*.md' -not -path './.git/*' -print -delete
+
+      # El sitio es estático: se publica la raíz del repo tal cual
+      - name: Subir artefacto
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4

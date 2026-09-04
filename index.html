@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fulbito — Organizá tu grupo de fútbol sin el caos de WhatsApp</title>
+<meta name="description" content="Se terminó copiar la lista, perseguir confirmaciones y buscar reemplazos a último momento. En Fulbito creás el partido, tu grupo confirma y quedan los equipos, el resultado y las estadísticas. Los primeros 100 Capitanes Fundadores entran antes que nadie.">
+<link rel="canonical" href="https://qa.fulbito.tech/">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F172A">
+<meta name="author" content="Fulbito">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fulbito">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://qa.fulbito.tech/">
+<meta property="og:title" content="Tu grupo de fútbol, sin el caos de WhatsApp">
+<meta property="og:description" content="Sé uno de los 100 Capitanes Fundadores: los que arman la lista, reservan la cancha y organizan el partido todas las semanas entran antes que nadie.">
+<meta property="og:image" content="https://qa.fulbito.tech/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Fulbito — tu grupo de fútbol, sin el caos de WhatsApp">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tu grupo de fútbol, sin el caos de WhatsApp">
+<meta name="twitter:description" content="Sé uno de los 100 Capitanes Fundadores: los que arman la lista, reservan la cancha y organizan el partido todas las semanas entran antes que nadie.">
+<meta name="twitter:image" content="https://qa.fulbito.tech/assets/img/og.jpg">
+
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+<!-- Marca que hay JS: sin esto las secciones con .reveal nunca se ocultan,
+     así el contenido siempre se ve aunque falle el script. -->
+<script>
+  document.documentElement.classList.add('js');
+  // Al refrescar, la página arranca arriba en vez de restaurar el scroll previo.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Fulbito",
+  "applicationCategory": "SportsApplication",
+  "operatingSystem": "iOS, Android",
+  "description": "App para organizar grupos de fútbol amateur: creás el partido, tu grupo confirma, se arman los equipos y queda el historial de resultados y estadísticas.",
+  "url": "https://qa.fulbito.tech/",
+  "inLanguage": "es",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/PreOrder"
+  }
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="site-header" id="top">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <img src="/assets/logotipo-claro.png" alt="Fulbito" width="123" height="38" class="brand-logo">
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+
+    <nav class="nav" id="nav-menu" aria-label="Navegación principal">
+      <a href="#problema">El problema</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#faq">Preguntas</a>
+      <a class="btn btn-primary btn-sm" href="#sumarme" data-cta="header">Quiero ser Capitán</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+
+      <div class="hero-copy">
+        <h1>Tu grupo de fútbol,<br><span class="hl">sin el caos de WhatsApp</span></h1>
+
+        <p class="lede">
+          Se terminó copiar la lista, perseguir confirmaciones y buscar reemplazo a último
+          momento. En Fulbito creás el partido, tu grupo confirma, y quedan armados los
+          equipos, el resultado y las estadísticas.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="#sumarme" data-cta="hero">Quiero ser Capitán Fundador</a>
+          <p class="hero-note">Gratis y sin compromiso. Estamos eligiendo los primeros 100 grupos.</p>
+          <p class="hero-alt">
+            <a href="#sumarme" data-cta="hero-jugador">¿No organizás vos el grupo? Pedí acceso anticipado igual</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Mockup del teléfono, hecho en HTML/CSS -->
+      <div class="hero-visual" aria-hidden="true">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+
+            <div class="app-top">
+              <img src="/assets/isotipo.png" alt="" width="28" height="28">
+              <div>
+                <p class="app-hi">Los Pibes del Miércoles</p>
+                <p class="app-sub">28 jugadores</p>
+              </div>
+            </div>
+
+            <div class="app-card app-card-hero">
+              <div class="app-card-head">
+                <span class="chip chip-green">Fútbol 9</span>
+                <span class="app-time">21:00</span>
+              </div>
+              <p class="app-title">Complejo El Nido · Cancha 2</p>
+              <p class="app-meta">Miércoles 12/03 · cierra el martes</p>
+
+              <div class="app-progress">
+                <p class="app-progress-top"><span>Confirmados</span><strong>14/18</strong></p>
+                <div class="balance"><span class="balance-fill" style="width:78%"></span></div>
+              </div>
+
+              <div class="avatars">
+                <span class="av av-1">MP</span>
+                <span class="av av-2">JD</span>
+                <span class="av av-3">LG</span>
+                <span class="av av-4">RS</span>
+                <span class="av av-more">+10</span>
+              </div>
+              <div class="app-btn">Confirmar que juego</div>
+            </div>
+
+            <div class="app-card">
+              <p class="app-card-label">Equipos armados</p>
+              <div class="teams">
+                <div class="team">
+                  <span class="team-dot team-a"></span>
+                  <div>
+                    <p class="team-name">Equipo A</p>
+                    <p class="team-line">9 jugadores · 1 arquero</p>
+                  </div>
+                  <span class="team-score">4</span>
+                </div>
+                <div class="team">
+                  <span class="team-dot team-b"></span>
+                  <div>
+                    <p class="team-name">Equipo B</p>
+                    <p class="team-line">9 jugadores · 1 arquero</p>
+                  </div>
+                  <span class="team-score">3</span>
+                </div>
+              </div>
+              <p class="app-card-foot">Repartidos por posición y nivel</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="float-card float-goals">
+          <strong>3</strong>
+          <span>en lista de espera</span>
+        </div>
+        <div class="float-card float-rank">
+          <strong>0</strong>
+          <span>mensajes para coordinar</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="wrap">
+      <ul class="chips" aria-label="Modalidades que cubre Fulbito">
+        <li>Fútbol 5</li>
+        <li>Fútbol 7</li>
+        <li>Fútbol 8</li>
+        <li>Fútbol 9</li>
+        <li>Fútbol 11</li>
+      </ul>
+      <p class="chips-note">
+        Masculino, femenino y mixto · Picados entre semana y torneos del finde
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ EL PROBLEMA ============ -->
+  <section class="section" id="problema">
+    <div class="wrap wrap-narrow">
+      <header class="section-head section-head-center reveal">
+        <p class="eyebrow">El problema</p>
+        <h2>¿Te suena?</h2>
+        <p class="section-lede">
+          Todas las semanas, el mismo ida y vuelta para llegar a los mismos 18 jugadores.
+        </p>
+      </header>
+
+      <div class="chat reveal" role="img"
+           aria-label="Conversación típica de un grupo de WhatsApp organizando un partido: quién tiene la última lista, alguien que se baja, falta uno, a qué hora es y dónde se juega.">
+        <p class="chat-day">Lunes</p>
+        <div class="bubble bubble-in"><span class="bubble-who">Nico</span>Che, ¿quién tiene la última lista?</div>
+        <div class="bubble bubble-in"><span class="bubble-who">Fede</span>Yo la copié pero creo que quedó vieja</div>
+        <div class="bubble bubble-out">1. Nico<br>2. Fede<br>3. Seba<br>4. …</div>
+        <p class="chat-day">Miércoles, 18:40</p>
+        <div class="bubble bubble-in"><span class="bubble-who">Seba</span>Loco, al final no puedo 😕</div>
+        <div class="bubble bubble-in"><span class="bubble-who">Tincho</span>Nos falta uno entonces</div>
+        <div class="bubble bubble-in"><span class="bubble-who">Juan</span>¿A qué hora era? ¿Y dónde jugamos?</div>
+        <div class="bubble bubble-out">A las 21, cancha 2. Paso la lista de nuevo…</div>
+      </div>
+
+      <p class="chat-punch reveal">
+        Ciento veinte mensajes para saber quiénes son los 18.
+        Y siempre lo termina resolviendo la misma persona.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ HOY VS CON FULBITO ============ -->
+  <section class="section section-alt" id="comparativa">
+    <div class="wrap">
+      <header class="section-head section-head-center reveal">
+        <p class="eyebrow">El cambio</p>
+        <h2>WhatsApp para hablar. Fulbito para organizar.</h2>
+        <p class="section-lede">
+          No se trata de dejar el grupo de chat. Se trata de sacar de ahí lo que el chat
+          no sabe hacer: llevar una lista que se actualiza sola.
+        </p>
+      </header>
+
+      <div class="compare reveal">
+        <article class="compare-col compare-before">
+          <h3 class="compare-head"><span class="compare-tag">Hoy</span> Todo por chat</h3>
+          <ol class="compare-steps">
+            <li>Alguien publica la lista</li>
+            <li>Cada uno la copia y se agrega</li>
+            <li>Aparecen tres versiones distintas</li>
+            <li>Dos se bajan a último momento</li>
+            <li>El organizador busca reemplazos</li>
+            <li>Se repite la cancha y el horario</li>
+            <li>Los equipos se arman en la puerta</li>
+            <li>El resultado no queda en ningún lado</li>
+          </ol>
+        </article>
+
+        <div class="compare-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+
+        <article class="compare-col compare-after">
+          <h3 class="compare-head"><span class="compare-tag compare-tag-green">Con Fulbito</span> Todo en un lugar</h3>
+          <ol class="compare-steps">
+            <li>Creás el partido una vez</li>
+            <li>Compartís el link por WhatsApp</li>
+            <li>Cada uno confirma con un toque</li>
+            <li>Los cupos y la lista de espera se manejan solos</li>
+            <li>Si alguien se baja, entra el que sigue</li>
+            <li>Cancha y horario están siempre a la vista</li>
+            <li>Los equipos salen armados</li>
+            <li>El resultado queda en el historial del grupo</li>
+          </ol>
+        </article>
+      </div>
+
+      <p class="compare-note reveal">
+        El link del partido se sigue compartiendo por WhatsApp. Lo que cambia es dónde
+        se administra: en vez de una lista copiada a mano, una que se actualiza sola.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ CÓMO FUNCIONA ============ -->
+  <section class="section" id="como-funciona">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <p class="eyebrow">Cómo funciona</p>
+        <h2>De la lista del lunes al historial del grupo</h2>
+        <p class="section-lede">
+          El mismo partido de siempre, con el trabajo de coordinación hecho por la app.
+        </p>
+      </header>
+
+      <ol class="steps steps-4">
+        <li class="step reveal">
+          <span class="step-num">1</span>
+          <h3>Creás tu grupo</h3>
+          <p>Le ponés nombre, invitás a tus jugadores con un link y ya tenés a los 30 adentro. Una sola vez.</p>
+        </li>
+        <li class="step reveal">
+          <span class="step-num">2</span>
+          <h3>Armás el partido</h3>
+          <p>Día, horario, complejo, modalidad y cupos. Abrís las inscripciones y compartís el link donde ya hablan.</p>
+        </li>
+        <li class="step reveal">
+          <span class="step-num">3</span>
+          <h3>Confirman ellos</h3>
+          <p>Cada uno se anota o se baja desde su celular. Los cupos, la lista de espera y los recordatorios corren por cuenta de la app.</p>
+        </li>
+        <li class="step reveal">
+          <span class="step-num">4</span>
+          <h3>Juegan y queda registrado</h3>
+          <p>Los equipos salen armados por posición y nivel. Al terminar cargan el resultado y los goles, y el grupo empieza a tener su historia.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ EL ORGANIZADOR ============ -->
+  <section class="section section-alt" id="organizador">
+    <div class="wrap">
+      <article class="feature reveal">
+        <div class="feature-media">
+          <picture>
+            <source srcset="/assets/img/picado.webp" type="image/webp">
+            <img src="/assets/img/picado.jpg" width="1400" height="1129" loading="lazy" decoding="async"
+                 alt="Un grupo de jugadores mira el celular antes de entrar a la cancha.">
+          </picture>
+        </div>
+        <div class="feature-body">
+          <p class="eyebrow">Para vos</p>
+          <h2>¿Siempre terminás organizando vos?</h2>
+          <p>En todos los grupos hay alguien así: quien sostiene el partido para que los demás solo tengan que aparecer con los botines.</p>
+          <ul class="ticks">
+            <li>Armás la lista y la volvés a publicar cada vez que cambia</li>
+            <li>Reservás la cancha y adelantás la seña</li>
+            <li>Preguntás uno por uno quién juega</li>
+            <li>Salís a buscar reemplazo cuando se baja alguien</li>
+            <li>Coordinás horario, equipos y quién lleva los pecheras</li>
+          </ul>
+          <p class="feature-punch">Entonces uno de los 100 lugares es tuyo.</p>
+          <a class="btn btn-primary" href="#sumarme" data-cta="organizador">Quiero ser Capitán Fundador</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 100 CAPITANES FUNDADORES ============ -->
+  <section class="section founders" id="capitanes">
+    <div class="wrap">
+
+      <header class="section-head section-head-center reveal">
+        <p class="eyebrow">La campaña</p>
+        <h2>Sé uno de los 100 Capitanes Fundadores</h2>
+        <p class="section-lede">
+          Fulbito arranca junto a 100 grupos reales de fútbol amateur y a la persona que
+          los mantiene en pie. Los primeros 100 capitanes entran antes que nadie y dejan
+          su marca en cómo termina siendo la app.
+        </p>
+      </header>
+
+      <ul class="perks reveal">
+        <li class="perk">
+          <span class="perk-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h8l-1 8 10-12h-8z"/></svg>
+          </span>
+          <h3>Acceso anticipado</h3>
+          <p>Entrás con tu grupo antes de que la app esté en las tiendas.</p>
+        </li>
+        <li class="perk">
+          <span class="perk-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/><path d="M8.2 13.8 7 22l5-3 5 3-1.2-8.2"/></svg>
+          </span>
+          <h3>Distintivo de Fundador</h3>
+          <p>Tu perfil y tu grupo quedan marcados como parte de los que empezaron.</p>
+        </li>
+        <li class="perk">
+          <span class="perk-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+          </span>
+          <h3>Voz en el producto</h3>
+          <p>Nos decís qué falta y qué sobra, y lo vamos ajustando con vos.</p>
+        </li>
+        <li class="perk">
+          <span class="perk-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+          <h3>Contacto directo</h3>
+          <p>Un canal con nosotros durante todas las pruebas, sin formularios de soporte.</p>
+        </li>
+      </ul>
+
+      <ul class="paths reveal">
+        <li class="path path-destacado">
+          <span class="path-tag">Si organizás tu grupo</span>
+          <h3>Capitán Fundador</h3>
+          <p>Entrás con tu grupo a las pruebas, con distintivo y línea directa con nosotros para decirnos qué falta.</p>
+          <p class="path-cupo">Son 100 lugares</p>
+        </li>
+        <li class="path">
+          <span class="path-tag">Si solo jugás</span>
+          <h3>Acceso anticipado</h3>
+          <p>Te avisamos apenas puedas usarla. Y si el capitán de tu grupo entra antes, entrás con ellos desde el primer partido.</p>
+          <p class="path-cupo">Sin cupo</p>
+        </li>
+      </ul>
+
+      <!-- ---- Formulario de dos pasos ---- -->
+      <div class="lead-card reveal" id="sumarme">
+        <h3 class="lead-title">Dejanos tus datos</h3>
+        <p class="lead-sub">Menos de un minuto. Si organizás tu grupo entrás en la selección de Capitanes; si solo jugás, te avisamos apenas salga.</p>
+
+        <form class="lead-form" id="lead-form" novalidate>
+
+          <div class="form-progress" aria-hidden="true">
+            <span class="form-progress-bar" id="form-progress-bar"></span>
+          </div>
+          <p class="form-step-label" id="form-step-label">Paso 1 de 2</p>
+
+          <!-- Paso 1 -->
+          <fieldset class="form-step is-active" data-step="1">
+            <legend class="sr-only">Tus datos</legend>
+
+            <div class="field">
+              <label for="lead-nombre">¿Cómo te llamás?</label>
+              <input type="text" id="lead-nombre" name="nombre" autocomplete="name"
+                     placeholder="Nombre y apellido" required>
+            </div>
+
+            <div class="field">
+              <label for="lead-contacto">Email o WhatsApp</label>
+              <input type="text" id="lead-contacto" name="contacto" inputmode="email" autocomplete="email"
+                     placeholder="tumail@ejemplo.com o 11 5555 5555" required>
+            </div>
+
+            <div class="field">
+              <label for="lead-ciudad">¿De dónde sos?</label>
+              <input type="text" id="lead-ciudad" name="ciudad" autocomplete="address-level2"
+                     placeholder="Ciudad o barrio" required>
+            </div>
+
+            <fieldset class="field choices" data-name="organiza">
+              <legend>¿Organizás vos el grupo?</legend>
+              <div class="choice-row">
+                <label class="choice"><input type="radio" name="organiza" value="si" required><span>Sí, organizo yo</span></label>
+                <label class="choice"><input type="radio" name="organiza" value="a-veces"><span>A veces, lo compartimos</span></label>
+                <label class="choice"><input type="radio" name="organiza" value="no"><span>No, solo juego</span></label>
+              </div>
+            </fieldset>
+          </fieldset>
+
+          <!-- Paso 2: solo para organizadores -->
+          <fieldset class="form-step" data-step="2" hidden>
+            <legend class="sr-only">Datos de tu grupo</legend>
+
+            <fieldset class="field choices" data-name="integrantes">
+              <legend>¿Cuántos son en el grupo?</legend>
+              <div class="choice-row">
+                <label class="choice"><input type="radio" name="integrantes" value="menos-10"><span>Menos de 10</span></label>
+                <label class="choice"><input type="radio" name="integrantes" value="10-20"><span>Entre 10 y 20</span></label>
+                <label class="choice"><input type="radio" name="integrantes" value="20-30"><span>Entre 20 y 30</span></label>
+                <label class="choice"><input type="radio" name="integrantes" value="mas-30"><span>Más de 30</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="field choices" data-name="frecuencia">
+              <legend>¿Cada cuánto juegan?</legend>
+              <div class="choice-row">
+                <label class="choice"><input type="radio" name="frecuencia" value="varias-semana"><span>Varias veces por semana</span></label>
+                <label class="choice"><input type="radio" name="frecuencia" value="semanal"><span>Una vez por semana</span></label>
+                <label class="choice"><input type="radio" name="frecuencia" value="cada-tanto"><span>Cada tanto</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="field choices" data-name="tipo">
+              <legend>¿Picados o torneos?</legend>
+              <div class="choice-row">
+                <label class="choice"><input type="radio" name="tipo" value="picados"><span>Picados</span></label>
+                <label class="choice"><input type="radio" name="tipo" value="torneos"><span>Torneos</span></label>
+                <label class="choice"><input type="radio" name="tipo" value="ambos"><span>Las dos cosas</span></label>
+              </div>
+            </fieldset>
+          </fieldset>
+
+          <!-- Campo trampa: invisible para las personas, tentador para los bots -->
+          <p class="sr-only" aria-hidden="true">
+            <label for="lead-web">Dejá este campo vacío</label>
+            <input type="text" id="lead-web" name="_gotcha" tabindex="-1" autocomplete="off">
+          </p>
+
+          <div class="form-actions">
+            <button class="btn btn-ghost" type="button" id="form-back" hidden>Atrás</button>
+            <button class="btn btn-primary btn-lg" type="submit" id="form-submit">Continuar</button>
+          </div>
+
+          <p class="form-note">No compartimos tus datos con nadie. Te escribimos solo por Fulbito.</p>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <!-- Pantalla de gracias -->
+        <div class="lead-done" id="lead-done" hidden>
+          <span class="lead-done-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </span>
+          <h3 id="lead-done-title">¡Listo!</h3>
+          <p id="lead-done-text"></p>
+          <a class="btn btn-primary" id="lead-share" data-cta="compartir-capitan" hidden>Pasarle el link a mi capitán</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ COMUNIDAD / SOCIAL PROOF ============ -->
+  <section class="section" id="comunidad">
+    <div class="wrap wrap-narrow">
+      <!-- Los números aparecen solos cuando hay datos reales en /data/comunidad.json -->
+      <ul class="proof" id="proof-stats" hidden>
+        <li><strong data-proof="capitanes">—</strong><span>Capitanes Fundadores</span></li>
+        <li><strong data-proof="grupos">—</strong><span>grupos</span></li>
+        <li><strong data-proof="jugadores">—</strong><span>jugadores</span></li>
+      </ul>
+
+      <blockquote class="quote reveal">
+        <p>“Nunca más se cancela un partido por falta de jugadores.”</p>
+        <cite>Lo que queremos que diga tu grupo dentro de un mes.</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ============ CIERRE ============ -->
+  <section class="section cta-section">
+    <div class="wrap">
+      <div class="cta reveal">
+        <img src="/assets/isotipo.png" alt="" width="72" height="72" class="cta-logo">
+        <p class="cta-lead">
+          Sumate como Capitán Fundador y entrá con tu grupo antes que nadie.
+        </p>
+        <a class="btn btn-primary btn-lg" href="#sumarme" data-cta="cierre">Quiero ser uno de los 100</a>
+        <p class="hero-alt">
+          <a href="#sumarme" data-cta="cierre-jugador">¿Solo jugás? Pedí acceso anticipado</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <div class="wrap wrap-narrow">
+      <header class="section-head reveal">
+        <p class="eyebrow">Preguntas</p>
+        <h2>Lo que nos preguntan seguido</h2>
+      </header>
+
+      <div class="faq">
+        <details class="reveal">
+          <summary>¿Qué es exactamente Fulbito?</summary>
+          <p>Una app para que un grupo de fútbol amateur se organice: crear el grupo, invitar a los jugadores, armar el partido de la semana, manejar confirmaciones y cupos, repartir los equipos y dejar registrado el resultado. Con el tiempo, el grupo va construyendo su historial y sus estadísticas.</p>
+        </details>
+        <details class="reveal">
+          <summary>¿Tengo que dejar de usar WhatsApp?</summary>
+          <p>No. El grupo de chat sigue siendo el lugar donde se habla y donde compartís el link del partido. Lo que sale de ahí es la administración: la lista, las bajas, los reemplazos y los horarios.</p>
+        </details>
+        <details class="reveal">
+          <summary>¿Qué es un Capitán Fundador?</summary>
+          <p>La persona que en su grupo arma la lista, reserva la cancha y organiza el partido. No hace falta ser el capitán del equipo dentro de la cancha: hace falta ser quien lo sostiene afuera. Son 100 lugares y con esos grupos arrancamos.</p>
+        </details>
+        <details class="reveal">
+          <summary>¿Qué tipo de fútbol cubre?</summary>
+          <p>Fútbol 5, 7, 8, 9 y 11, y da igual si el equipo es masculino, femenino o mixto: la app no distingue. Sirve tanto para el picado de entre semana como para el equipo que juega torneos los fines de semana, y la modalidad la elegís al crear cada partido, no al crear el grupo.</p>
+        </details>
+        <details class="reveal">
+          <summary>¿Y si no organizo yo mi grupo?</summary>
+          <p>Anotate igual: el acceso anticipado no es solo para capitanes y no tiene cupo. Te avisamos apenas puedas usar la app. Y si querés adelantar las cosas, pasale el link a quien organiza tu grupo: si entra como Capitán Fundador, entran todos juntos desde el primer partido.</p>
+        </details>
+        <details class="reveal">
+          <summary>¿Tiene costo?</summary>
+          <p>Crear tu grupo, organizar los partidos, manejar confirmaciones y llevar el historial no tiene costo.</p>
+        </details>
+        <details class="reveal">
+          <summary>¿Cuándo puedo empezar a usarla?</summary>
+          <p>Estamos en desarrollo y va a estar en App Store y Google Play. Los Capitanes Fundadores entran antes, durante las pruebas con grupos reales. Si dejás tus datos, te avisamos apenas te toque.</p>
+        </details>
+        <details class="reveal">
+          <summary>¿Qué hacen con mis datos?</summary>
+          <p>Los usamos para contactarte por Fulbito y para entender cómo juega tu grupo. No los compartimos con nadie y podés pedirnos que los borremos cuando quieras escribiéndonos a <a href="mailto:hola@fulbito.tech">hola@fulbito.tech</a>.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <a class="brand" href="#top">
+        <img src="/assets/logotipo-claro.png" alt="Fulbito" width="110" height="34" class="brand-logo">
+      </a>
+      <p>El lugar donde tu grupo de fútbol se organiza.</p>
+
+      <div class="stores" aria-label="Disponibilidad próximamente">
+        <span class="store-badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16.36 12.68c.02-2.24 1.83-3.32 1.91-3.37-1.04-1.52-2.66-1.73-3.24-1.75-1.38-.14-2.69.81-3.39.81-.7 0-1.78-.79-2.92-.77-1.5.02-2.88.87-3.65 2.21-1.56 2.7-.4 6.7 1.12 8.89.74 1.07 1.63 2.28 2.79 2.24 1.12-.05 1.54-.72 2.9-.72s1.74.72 2.92.7c1.21-.02 1.97-1.1 2.71-2.18.85-1.25 1.2-2.46 1.22-2.52-.03-.01-2.34-.9-2.37-3.54M14.2 5.98c.62-.75 1.03-1.79.92-2.83-.89.04-1.97.59-2.6 1.34-.57.66-1.07 1.72-.94 2.73.99.08 2-.5 2.62-1.24"/></svg>
+          <span><small>Próximamente en</small><strong>App Store</strong></span>
+        </span>
+        <span class="store-badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3.61 1.81 13.79 12 3.61 22.19A1.5 1.5 0 0 1 3 20.99V3.01c0-.5.24-.94.61-1.2m10.89 10.89 2.3 2.3-10.94 6.34zm3.42-3.42 2.8 1.63c1.09.62 1.09 1.63 0 2.25l-2.8 1.62-2.55-2.55zM5.86 2.66l10.94 6.33-2.3 2.3z"/></svg>
+          <span><small>Próximamente en</small><strong>Google Play</strong></span>
+        </span>
+      </div>
+    </div>
+
+    <nav class="footer-nav" aria-label="Enlaces del pie">
+      <a href="#problema">El problema</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#capitanes">Capitanes Fundadores</a>
+      <a href="#faq">Preguntas</a>
+      <a href="/support/">Soporte</a>
+      <a href="/privacy/">Privacidad</a>
+      <a href="/terms/">Términos</a>
+      <a href="/delete-account/">Eliminar cuenta</a>
+      <a href="mailto:hola@fulbito.tech">hola@fulbito.tech</a>
+    </nav>
+  </div>
+
+  <div class="wrap footer-legal">
+    <p>© <span id="year">2026</span> Fulbito. Todos los derechos reservados.</p>
+    <p>Hecho para el fútbol amateur argentino.</p>
+  </div>
+</footer>
+
+<!-- CTA fijo en mobile: aparece al pasar el hero y se esconde sobre el formulario -->
+<div class="sticky-cta" id="sticky-cta" hidden>
+  <a class="btn btn-primary" href="#sumarme" data-cta="sticky">Quiero ser Capitán Fundador</a>
+</div>
+
+<script src="/script.js" defer></script>
+</body>
+</html>

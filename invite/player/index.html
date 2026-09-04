@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reclamá tu historial — Fulbito</title>
+<meta name="description" content="Te anotaron en un grupo de Fulbito. Reclamá tu historial de partidos.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F172A">
+
+<!-- Sin Open Graph y con noindex, por el mismo motivo que /login/: esta URL
+     lleva un token en la query. Una previsualización en WhatsApp hace que el
+     servidor de la plataforma visite el link, y de paso lo deja registrado
+     ahí. El GET es de sólo lectura, así que no quema nada, pero el token no
+     tiene por qué circular más de lo necesario. -->
+
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Misma tarjeta y mismo sistema visual que /invite/ y /login/. -->
+<link rel="stylesheet" href="/invite/invite.css">
+
+<style>
+  /* El historial es lo único que esta página tiene y las otras dos no: es el
+     argumento entero. Va grande, arriba del botón. */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 22px 0 4px;
+    padding: 0;
+    list-style: none;
+  }
+  .stats li {
+    padding: 14px 10px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .03);
+    text-align: center;
+  }
+  .stats b {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .stats span {
+    display: block;
+    margin-top: 2px;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--text-muted);
+  }
+  /* Cuatro en fila cuando entran; si el grupo no tiene MVP la lista queda en
+     tres y el grid se acomoda solo. */
+  @media (min-width: 460px) {
+    .stats { grid-template-columns: repeat(auto-fit, minmax(88px, 1fr)); }
+  }
+  .stats-vacio {
+    margin: 20px 0 0;
+    color: var(--text-soft);
+    font-size: .95rem;
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <img src="/assets/logotipo-claro.png" alt="Fulbito" width="103" height="32">
+  <span class="env" id="env-badge" hidden>QA</span>
+</header>
+
+<main class="shell">
+
+  <!-- Estado: verificando el enlace -->
+  <section class="card" id="state-loading" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="state-msg">Buscando tu historial…</p>
+  </section>
+
+  <!-- Estado: el enlace sirve -->
+  <section class="card" id="state-ok" hidden>
+    <p class="eyebrow">Tu historial te espera</p>
+
+    <div class="crest" id="claim-crest" aria-hidden="true">FC</div>
+    <h1 class="group-name" id="claim-group">—</h1>
+    <p class="host">Sos <strong id="claim-name">—</strong> en este grupo</p>
+
+    <ul class="meta" id="claim-meta"></ul>
+
+    <ul class="stats" id="claim-stats"></ul>
+    <p class="stats-vacio" id="claim-stats-vacio" hidden>
+      Todavía no jugaste partidos con este grupo. Reclamá tu lugar y empezá a
+      sumar desde el próximo.
+    </p>
+
+    <div class="actions" id="claim-actions" hidden>
+      <button class="btn btn-primary" type="button" id="btn-open">Reclamar mi historial</button>
+    </div>
+
+    <div class="stores-note">
+      <p id="claim-hint">
+        Fulbito todavía no está en las tiendas. Guardamos tu enlace en este
+        teléfono: cuando la app salga, abrila y tu historial te va a estar
+        esperando.
+      </p>
+    </div>
+
+    <p class="code" id="claim-code" hidden></p>
+  </section>
+
+  <!-- Estado: vencido, anulado, ya reclamado, inexistente o sin respuesta -->
+  <section class="card" id="state-error" hidden>
+    <div class="crest" aria-hidden="true">⚽</div>
+    <h1 class="group-name" id="err-title">Este enlace no funciona</h1>
+    <p class="host" id="err-text">Puede que esté incompleto o que haya vencido.</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="/">Conocer Fulbito</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p><a href="/">www.fulbito.tech</a> · El lugar donde tu grupo de fútbol se organiza.</p>
+</footer>
+
+<script src="/invite/player/player.js" defer></script>
+</body>
+</html>

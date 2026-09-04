@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eliminar tu cuenta — Fulbito</title>
+<meta name="description" content="Cómo eliminar tu cuenta de Fulbito y qué pasa con tus datos y tus estadísticas.">
+<link rel="canonical" href="https://www.fulbito.tech/delete-account/">
+<meta name="theme-color" content="#0F172A">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://www.fulbito.tech/delete-account/">
+<meta property="og:title" content="Eliminar tu cuenta — Fulbito">
+<meta property="og:description" content="Cómo eliminar tu cuenta de Fulbito y qué pasa con tus datos y tus estadísticas.">
+<meta property="og:image" content="https://www.fulbito.tech/assets/img/og.jpg">
+
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="/assets/legal.css">
+<style>
+  /* Los pasos numerados son el corazón de esta página: van más grandes y
+     separados que una lista normal, para poder seguirlos con el teléfono en
+     la otra mano. */
+  .pasos { margin: 0 0 28px; padding: 0; list-style: none; counter-reset: paso; }
+  .pasos li {
+    position: relative;
+    margin-bottom: 18px;
+    padding: 16px 20px 16px 62px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    counter-increment: paso;
+  }
+  .pasos li::before {
+    content: counter(paso);
+    position: absolute;
+    left: 18px;
+    top: 16px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--green);
+    color: #fff;
+    font-size: .95rem;
+    font-weight: 800;
+  }
+  .pasos li p { margin: 0; }
+  .pasos li p + p { margin-top: 8px; color: var(--text-muted); font-size: .93rem; }
+
+  .app-nombre {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 30px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+  }
+  .app-nombre img { width: 52px; height: 52px; flex: none; }
+  .app-nombre p { margin: 0; font-size: .93rem; color: var(--text-muted); }
+  .app-nombre strong { display: block; font-size: 1.15rem; color: var(--text); }
+
+  .cols { display: grid; gap: 16px; margin: 0 0 16px; }
+  @media (min-width: 720px) { .cols { grid-template-columns: 1fr 1fr; } }
+  .cols .caja { margin: 0; }
+  .cols h3 { margin-top: 0; }
+  .cols ul { padding-left: 20px; }
+  .cols li { font-size: .96rem; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Fulbito — ir al inicio">
+      <img src="/assets/logotipo-claro.png" alt="Fulbito" width="480" height="151">
+    </a>
+    <a class="volver" href="/">← Volver al inicio</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <h1>Eliminar tu cuenta</h1>
+    <p class="fecha">Última actualización: 31 de agosto de 2026</p>
+
+    <div class="app-nombre">
+      <img src="/assets/isotipo.png" alt="" width="52" height="52">
+      <p>
+        <strong>Fulbito</strong>
+        App para organizar grupos de fútbol amateur
+      </p>
+    </div>
+
+    <p>
+      Podés eliminar tu cuenta vos mismo, desde la app, cuando quieras. No hace
+      falta que nos escribas ni que expliques por qué.
+    </p>
+
+    <h2>Cómo hacerlo desde la app</h2>
+
+    <ol class="pasos">
+      <li>
+        <p>Abrí <strong>Fulbito</strong> en tu teléfono e iniciá sesión con la
+        cuenta que querés eliminar.</p>
+      </li>
+      <li>
+        <p>Entrá a tu <strong>pantalla de perfil</strong>.</p>
+      </li>
+      <li>
+        <p>Tocá el botón <strong>“Eliminar mi cuenta”</strong>.</p>
+      </li>
+      <li>
+        <p><strong>Confirmá</strong> cuando la app te lo pida.</p>
+        <p>Te pedimos confirmación porque la eliminación no se puede deshacer.</p>
+      </li>
+    </ol>
+
+    <h2>Qué pasa con tus datos</h2>
+
+    <p>
+      Al confirmar, <strong>eliminamos todos tus datos personales</strong>. Lo
+      que se conserva son las estadísticas de los partidos que jugaste, pero
+      desligadas de vos: pasan a figurar como
+      <strong>“Usuario desactivado”</strong>, sin ningún dato que permita
+      identificarte.
+    </p>
+
+    <div class="cols">
+      <div class="caja">
+        <h3>Se elimina</h3>
+        <ul>
+          <li>Tu nombre y tu foto de perfil</li>
+          <li>Tu email y tu teléfono</li>
+          <li>Tu ciudad y el resto de los datos de tu perfil</li>
+          <li>Tus credenciales de acceso</li>
+          <li>Tu pertenencia a los grupos</li>
+        </ul>
+      </div>
+      <div class="caja">
+        <h3>Se conserva, ya anonimizado</h3>
+        <ul>
+          <li>Los partidos jugados y sus resultados</li>
+          <li>Las estadísticas históricas del grupo</li>
+        </ul>
+        <p>Todo eso queda a nombre de <strong>“Usuario desactivado”</strong>.</p>
+      </div>
+    </div>
+
+    <h3>Por qué no se borran las estadísticas</h3>
+    <p>
+      Un partido no es tuyo solo: es del grupo. Si borráramos tu participación,
+      cambiarían los resultados y las tablas históricas de todos los demás —
+      partidos que quedarían con equipos incompletos y estadísticas que dejarían
+      de cuadrar. Por eso conservamos el registro deportivo, pero
+      <strong>sin nada que te identifique</strong>: nadie puede saber que ese
+      “Usuario desactivado” fuiste vos.
+    </p>
+
+    <h2>Cuándo se hace efectivo</h2>
+    <p>
+      Tus datos personales se eliminan de inmediato al confirmar, y desaparecen
+      de nuestras copias de respaldo dentro de los <strong>30 días</strong>.
+      Podemos conservar por más tiempo únicamente lo que una obligación legal nos
+      exija guardar.
+    </p>
+
+    <div class="aviso">
+      <p>
+        <strong>La eliminación no se puede deshacer.</strong> Si más adelante
+        querés volver a usar Fulbito, vas a tener que crear una cuenta nueva, y
+        no vamos a poder recuperar tu historial anterior ni volver a vincularte
+        con tus estadísticas.
+      </p>
+    </div>
+
+    <h2>¿No podés hacerlo desde la app?</h2>
+    <p>
+      Si perdiste el acceso a tu cuenta, desinstalaste la app o el botón no te
+      funciona, escribinos a
+      <a href="mailto:hola@fulbito.tech?subject=Eliminar%20mi%20cuenta%20de%20Fulbito">hola@fulbito.tech</a>
+      desde el correo con el que te registraste, pidiendo la eliminación. Te
+      confirmamos dentro de los <strong>2 días hábiles</strong>.
+    </p>
+    <p>
+      Si nos escribís desde otra dirección vamos a necesitar verificar que la
+      cuenta es tuya antes de eliminarla. Es para protegerte: si no lo
+      hiciéramos, cualquiera podría pedir el borrado de una cuenta ajena.
+    </p>
+
+    <h2>Enlaces útiles</h2>
+    <ul>
+      <li><a href="/privacy/">Política de privacidad</a></li>
+      <li><a href="/terms/">Términos y condiciones</a></li>
+      <li><a href="/support/">Soporte</a></li>
+    </ul>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© <span id="year">2026</span> Fulbito · <a href="/">www.fulbito.tech</a> · <a href="/privacy/">Privacidad</a> · <a href="/terms/">Términos</a> · <a href="/support/">Soporte</a></p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = String(new Date().getFullYear());
+</script>
+
+</body>
+</html>

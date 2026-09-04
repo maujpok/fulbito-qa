@@ -1,0 +1,26 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "VMC8M5V4A8.com.maudevarg.fulbito"
+        ],
+        "components": [
+          {
+            "/": "/invite/player/",
+            "comment": "Claim de un participante guest (?t=). Entrada propia: /invite/ NO la matchea"
+          },
+          {
+            "/": "/login/",
+            "comment": "Acceso por email sin contrasena, magic link (?t=)"
+          },
+          {
+            "/": "/group/*",
+            "comment": "Detalle de grupo. Los genera el app al compartir (AppUrls.groupLink)"
+          }
+        ]
+      }
+    ]
+  }
+}
