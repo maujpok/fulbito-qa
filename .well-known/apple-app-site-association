@@ -4,7 +4,8 @@
     "details": [
       {
         "appIDs": [
-          "VMC8M5V4A8.com.maudevarg.fulbito"
+          "VMC8M5V4A8.com.maudevarg.fulbito.qa",
+          "VMC8M5V4A8.com.maudevarg.fulbito.dev"
         ],
         "components": [
           {
