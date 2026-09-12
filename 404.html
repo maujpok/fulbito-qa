@@ -28,7 +28,20 @@
       location.replace('/invite/?t=' + m[1] + extra);
       return;
     }
-    if (m) location.replace('/invite/player/' + location.search);
+    if (m) {
+      location.replace('/invite/player/' + location.search);
+      return;
+    }
+
+    // Grupo compartido desde la app (AppUrls.groupLink). Misma mecánica que
+    // /invite/{token}, y la misma consecuencia: el primer pedido responde 404,
+    // así que WhatsApp no muestra tarjeta para la forma con la ruta. Por eso
+    // conviene que la app emita /group/?g= directo. Ver README seccion 6.
+    var g = location.pathname.match(/^\/group\/([^\/?#]+)\/?$/);
+    if (g) {
+      location.replace('/group/?g=' + g[1] + extra);
+      return;
+    }
   })();
 </script>
 <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>

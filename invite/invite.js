@@ -4,12 +4,33 @@
    Resuelve /invite/{token} (y también /invite/?t={token} y /invite/#{token}),
    muestra los datos del grupo y manda a la app.
 
-   Contrato real, GET {api}/groups/invites/{token}, medido contra QA el
-   2026-09-01 (ver agents-talks/MENSAJE_equipo_web_2026-09-01.md):
-     200 -> { group: { id, name, membersCount },
-              invitedBy: { nickname },   // nickname puede venir null
-              valid, requiresApproval }
+   Contrato, GET {api}/groups/invites/{token} — público, sin Authorization:
+   quien abre el link puede no tener cuenta todavía.
+
+     200 -> { group:     { id, name, membersCount },
+              invitedBy: { nickname },     // puede venir null
+              valid, requiresApproval,
+              invalidReason }              // sólo cuando valid es false
      404 -> { error: { message, code: 'INVITE_NOT_FOUND', statusCode } }
+
+   ⚠️ Un 200 no significa que el link sirva: `valid` manda sobre el status. Un
+   token vencido, revocado o ya usado responde 200 con `valid: false` y el
+   motivo en `invalidReason`. Un token que NO EXISTE responde 404.
+
+   Son cinco ramas, no cuatro. Y el 404 no es un caso raro: es el link
+   truncado al copiarlo de WhatsApp. Por eso tiene copy propio y no cae en el
+   mensaje genérico — ver errorNoExiste().
+
+   ⚠️ Medido el 2026-09-08 contra qa y prod: el 404 y su `code` están
+   verificados. Los valores de `invalidReason` NO se pudieron verificar en
+   este endpoint (hace falta un token inválido real de QA), así que
+   errorPorMotivo() trata el motivo desconocido como un caso normal y cae en
+   un mensaje genérico. Dice menos, no dice mal.
+
+   Sin datos mock, a propósito. El mock derivaba un grupo del token, y en
+   cualquier host que no estuviera en ENTORNOS la página mostraba "Los Pibes
+   del Miércoles, 28 jugadores" para una invitación real: un bug que no rompe,
+   sólo miente. Mismo criterio que player.js, que nunca lo tuvo.
 
    CORS: ALLOWED_ORIGINS quedó cargado en Render (qa y prod) el 2026-09-03 y
    está verificado — la API responde con Access-Control-Allow-Origin para
@@ -23,16 +44,24 @@
 
   /* ------------------------------ configuración -------------------------- */
 
+  var API_QA = 'https://sport-team-manager-api-8hud.onrender.com/v1/es';
+
   var ENTORNOS = {
     // hostname -> configuración
     'www.fulbito.tech': { nombre: 'prod', api: 'https://api.fulbito.tech/v1/es' },
-    'fulbito.tech':     { nombre: 'prod', api: 'https://api.fulbito.tech/v1/es' },
-    'qa.fulbito.tech':  { nombre: 'qa',   api: 'https://sport-team-manager-api-8hud.onrender.com/v1/es' }
-  };
 
-  // Base de la API que resuelve invitaciones. Vacío = datos mockeados
-  // (sirve para levantar la página en local sin pegarle a nada real).
-  var INVITE_API = '';
+    // El ápex no está en ALLOWED_ORIGINS de la API de producción (medido el
+    // 2026-09-08), pero GitHub Pages responde 301 al www antes de que corra
+    // este JS. La entrada queda como defensa en profundidad.
+    'fulbito.tech':     { nombre: 'prod', api: 'https://api.fulbito.tech/v1/es' },
+
+    'qa.fulbito.tech':  { nombre: 'qa',   api: API_QA },
+
+    // Para levantar la página en local. Apunta a QA, que es la API que el
+    // mock venía simulando; sin esto, local caería en la rama sin API.
+    'localhost':        { nombre: 'local', api: API_QA },
+    '127.0.0.1':        { nombre: 'local', api: API_QA }
+  };
 
   // Esquema ya registrado en la app (iOS Info.plist y AndroidManifest).
   // El handler de la app todavía no atiende "invite": ver README.
@@ -54,8 +83,8 @@
   /* -------------------------------- entorno ------------------------------ */
 
   var host = window.location.hostname;
-  var entorno = ENTORNOS[host] || { nombre: host === 'localhost' || host === '127.0.0.1' ? 'local' : 'desconocido', api: '' };
-  var api = INVITE_API || entorno.api;
+  var entorno = ENTORNOS[host] || { nombre: 'desconocido', api: '' };
+  var api = entorno.api;
 
   if (entorno.nombre !== 'prod') {
     var badge = document.getElementById('env-badge');
@@ -85,41 +114,16 @@
 
   var token = leerToken().trim();
 
-  /* ------------------------------ datos mock -----------------------------
-     Derivados del token para que cada link muestre algo distinto: sirve para
-     probar en QA sin API. Se reemplazan solos cuando INVITE_API tenga valor.
-     ===================================================================== */
-
-  var GRUPOS_MOCK = [
-    { group: { name: 'Los Pibes del Miércoles', membersCount: 28 }, invitedBy: { nickname: 'Nico' }, valid: true, requiresApproval: false },
-    { group: { name: 'Fulbito de los Jueves', membersCount: 14 }, invitedBy: { nickname: 'Fede' }, valid: true, requiresApproval: false },
-    { group: { name: 'Los Cuervos FC', membersCount: 34 }, invitedBy: { nickname: 'Seba' }, valid: true, requiresApproval: true }
-  ];
-
-  function mockPara(valor) {
-    var suma = 0;
-    for (var i = 0; i < valor.length; i++) suma += valor.charCodeAt(i);
-    return GRUPOS_MOCK[suma % GRUPOS_MOCK.length];
-  }
-
   /* ------------------------------- resolución ---------------------------- */
 
   function resolver(valor) {
-    if (!api) {
-      // Sin API: mock con una demora corta para que se vea el estado de carga.
-      return new Promise(function (resolve) {
-        setTimeout(function () { resolve(mockPara(valor)); }, 450);
-      });
-    }
-
     // groups/invites, no invites: la landing le pegaba a un endpoint que
-    // nunca existió (medido y corregido el 2026-09-03, ver el mensaje de
-    // arriba). Público, sin Authorization — quien abre el link puede no
-    // tener cuenta todavía.
+    // nunca existió (medido y corregido el 2026-09-03). Público, sin
+    // Authorization — quien abre el link puede no tener cuenta todavía.
     var control = new AbortController();
     var avisoLento = setTimeout(function () {
       var msg = elLoading && elLoading.querySelector('.state-msg');
-      if (msg) msg.textContent = 'Esto esta tardando mas de lo normal…';
+      if (msg) msg.textContent = 'Esto está tardando más de lo normal…';
     }, TIEMPO_AVISO_MS);
     var corte = setTimeout(function () { control.abort(); }, TIEMPO_LIMITE_MS);
     var listo = function () {
@@ -138,12 +142,9 @@
     }, function (err) {
       listo();
       throw err;
-    }).then(function (datos) {
-      // `valid: false` es una invitación que existe pero ya no sirve
-      // (revocada, vencida) — mismo tratamiento que el 404.
-      if (datos && datos.valid === false) throw new Error('no-existe');
-      return datos;
     });
+    // `valid` no se mira acá: el que llama necesita el invalidReason para
+    // elegir el mensaje, y un throw lo perdería.
   }
 
   /* -------------------------------- pintado ------------------------------ */
@@ -173,10 +174,60 @@
     mostrar('error');
   }
 
+  /* --------------------------- las ramas de error ------------------------ */
+
+  // Los motivos piden mensajes distintos, y no es cosmético: colapsarlos en
+  // "no funciona" manda a pedir una invitación nueva a alguien que ya está
+  // adentro, o a insistir con una que el organizador dio de baja a propósito.
+  function errorPorMotivo(motivo) {
+    if (motivo === 'EXPIRED') {
+      error(
+        'La invitación venció',
+        'Las invitaciones duran un tiempo limitado. Pedile una nueva a quien ' +
+        'organiza el grupo: con eso alcanza.'
+      );
+      return;
+    }
+    if (motivo === 'REVOKED') {
+      error(
+        'La invitación fue dada de baja',
+        'Quien organiza el grupo anuló esta invitación. Pedir otra no va a ' +
+        'servir hasta que hables con esa persona.'
+      );
+      return;
+    }
+    if (motivo === 'USED' || motivo === 'ALREADY_CLAIMED') {
+      error(
+        'Ya usaste esta invitación',
+        'Alguien la aceptó, probablemente vos. Entrá a Fulbito con tu cuenta ' +
+        'y vas a encontrar el grupo ahí.'
+      );
+      return;
+    }
+    // Motivo desconocido, o un 200 con valid:false sin invalidReason: ver el
+    // ⚠️ del encabezado.
+    error(
+      'Esta invitación no funciona',
+      'Puede haber vencido o haber sido dada de baja. Pedile una nueva a ' +
+      'quien organiza el grupo.'
+    );
+  }
+
+  // El 404 no cae en el genérico: es el link truncado al copiarlo de
+  // WhatsApp. Decirle "venció" a quien pegó mal la dirección lo manda a
+  // pedir una invitación nueva que va a fallar exactamente igual.
+  function errorNoExiste() {
+    error(
+      'Este link no funciona',
+      'Puede que haya llegado cortado. Copiá la dirección entera del mensaje, ' +
+      'o pedile una nueva a quien organiza el grupo.'
+    );
+  }
+
   function pintar(datos) {
-    // El contrato real anida en group/invitedBy, no en campos planos — ver
-    // el comentario del encabezado. invitedBy.nickname puede venir null:
-    // un usuario sin nickname es un caso normal, no un error.
+    // El contrato anida en group/invitedBy, no en campos planos — ver el
+    // comentario del encabezado. invitedBy.nickname puede venir null: un
+    // usuario sin nickname es un caso normal, no un error.
     var grupo = (datos.group && datos.group.name) || '';
     var anfitrion = (datos.invitedBy && datos.invitedBy.nickname) || '';
     var jugadores = datos.group && datos.group.membersCount;
@@ -188,7 +239,7 @@
 
     var meta = document.getElementById('inv-meta');
     meta.textContent = '';
-    [jugadores ? jugadores + ' jugadores' : '']
+    [jugadores ? jugadores + (jugadores === 1 ? ' jugador' : ' jugadores') : '']
       .filter(Boolean)
       .forEach(function (texto) {
         var li = document.createElement('li');
@@ -262,15 +313,31 @@
     error('Falta el código', 'El link llegó incompleto. Pedile al que te invitó que te lo mande de nuevo, entero.');
   } else if (!TOKEN_RE.test(token)) {
     error('Este link no funciona', 'El código de invitación no tiene un formato válido. Pedile uno nuevo al que te invitó.');
+  } else if (!api) {
+    // Host que no está en ENTORNOS. Acá antes se mostraba un grupo inventado:
+    // ahora se dice que no se pudo verificar, que es lo único cierto.
+    error(
+      'No pudimos abrir la invitación',
+      'Estamos con un problema para validar tu invitación. Probá de nuevo en un rato.'
+    );
   } else {
     resolver(token)
-      .then(pintar)
+      .then(function (datos) {
+        // Estricto a propósito: con `=== false`, un `valid` ausente o null
+        // pintaba la tarjeta de una invitación que no sirve.
+        if (!datos || datos.valid !== true) {
+          errorPorMotivo(datos && datos.invalidReason);
+          return;
+        }
+        pintar(datos);
+      })
       .catch(function (err) {
         if (err && err.message === 'no-existe') {
-          error('La invitación venció', 'Este link ya no está activo. Pedile al que te invitó que te mande uno nuevo.');
+          errorNoExiste();
         } else if (err && err.name === 'AbortError') {
           error('No pudimos abrir la invitación', 'El servidor tardó demasiado en responder. Probá de nuevo en un rato.');
         } else {
+          // CORS entra por acá — ver el encabezado.
           error('No pudimos abrir la invitación', 'Puede ser un problema de conexión. Probá de nuevo en un rato.');
         }
       });

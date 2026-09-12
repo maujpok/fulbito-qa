@@ -1,0 +1,22 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.maudevarg.fulbito.qa",
+      "sha256_cert_fingerprints": [
+        "09:75:6E:EE:A4:94:BB:AA:C1:A2:2E:84:B1:F8:4F:45:46:CC:8C:D8:1C:9E:D1:AC:8E:74:A4:B9:D1:E1:8A:5F"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.maudevarg.fulbito.dev",
+      "sha256_cert_fingerprints": [
+        "D0:BE:0E:36:FC:AE:9D:E9:4F:36:27:F5:1B:7E:03:CC:10:34:9B:F6:4E:0A:78:45:3C:3F:BD:13:88:B4:9D:1D"
+      ]
+    }
+  }
+]

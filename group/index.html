@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Te compartieron un grupo en Fulbito</title>
+<meta name="description" content="Alguien te compartió su grupo de fútbol. Fulbito es donde el grupo se organiza: partidos, confirmaciones y estadísticas.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F172A">
+
+<!-- Sí lleva Open Graph, al contrario de /invite/player/ y /login/. Esas dos
+     llevan un token que ES la credencial, y una previsualización hace que el
+     servidor de WhatsApp visite el link y lo deje registrado ahí. Un id de
+     grupo no es credencial: el endpoint que lo usa exige Authorization
+     (401, medido el 2026-09-08). Y este link vive en WhatsApp — que muestre
+     tarjeta es la mitad de su trabajo.
+
+     La tarjeta es genérica a propósito: no hay endpoint público de grupo, así
+     que no hay nombre que poner. Tampoco se filtra nada. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fulbito">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Te compartieron un grupo en Fulbito">
+<meta property="og:description" content="Fulbito es donde tu grupo de fútbol se organiza: partidos, confirmaciones y estadísticas en un solo lugar.">
+<meta property="og:image" content="https://www.fulbito.tech/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Misma tarjeta y mismo sistema visual que /invite/, /invite/player/ y
+     /login/. Sin CSS propio: esta página no tiene nada que las otras no
+     tengan. -->
+<link rel="stylesheet" href="/invite/invite.css">
+</head>
+<body>
+
+<header class="top">
+  <img src="/assets/logotipo-claro.png" alt="Fulbito" width="103" height="32">
+  <span class="env" id="env-badge" hidden>QA</span>
+</header>
+
+<main class="shell">
+
+  <!-- No hay estado "cargando" porque no hay nada que consultar: no existe
+       endpoint público de grupo. Y la tarjeta arranca VISIBLE para que la
+       página siga sirviendo sin JS — lo único que agrega el script es el
+       código, el botón y guardar el id para el deep link diferido. -->
+  <section class="card" id="state-ok">
+    <p class="eyebrow">Te compartieron un grupo</p>
+
+    <div class="crest" aria-hidden="true">⚽</div>
+    <h1 class="group-name">Un grupo de Fulbito</h1>
+    <p class="host">Alguien te compartió su grupo. En Fulbito el grupo se
+      organiza solo: partidos, quién juega y el historial de cada uno, sin
+      buscar la lista en el chat.</p>
+
+    <div class="actions">
+      <button class="btn btn-primary" type="button" id="btn-open" hidden>Abrir en Fulbito</button>
+      <a class="btn btn-ghost" href="/">¿Qué es Fulbito?</a>
+    </div>
+
+    <div class="stores-note" id="stores-note">
+      <p id="stores-text">Fulbito todavía no está en las tiendas. Guardamos
+        este grupo en tu teléfono: cuando la app salga, abrila y entrás
+        directo.</p>
+      <div class="stores">
+        <a class="store" id="store-ios" href="/" aria-label="Próximamente en App Store">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.36 12.68c.02-2.24 1.83-3.32 1.91-3.37-1.04-1.52-2.66-1.73-3.24-1.75-1.38-.14-2.69.81-3.39.81-.7 0-1.78-.79-2.92-.77-1.5.02-2.88.87-3.65 2.21-1.56 2.7-.4 6.7 1.12 8.89.74 1.07 1.63 2.28 2.79 2.24 1.12-.05 1.54-.72 2.9-.72s1.74.72 2.92.7c1.21-.02 1.97-1.1 2.71-2.18.85-1.25 1.2-2.46 1.22-2.52-.03-.01-2.34-.9-2.37-3.54M14.2 5.98c.62-.75 1.03-1.79.92-2.83-.89.04-1.97.59-2.6 1.34-.57.66-1.07 1.72-.94 2.73.99.08 2-.5 2.62-1.24"/></svg>
+          <span><small>Próximamente</small><strong>App Store</strong></span>
+        </a>
+        <a class="store" id="store-android" href="/" aria-label="Próximamente en Google Play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3.61 1.81 13.79 12 3.61 22.19A1.5 1.5 0 0 1 3 20.99V3.01c0-.5.24-.94.61-1.2m10.89 10.89 2.3 2.3-10.94 6.34zm3.42-3.42 2.8 1.63c1.09.62 1.09 1.63 0 2.25l-2.8 1.62-2.55-2.55zM5.86 2.66l10.94 6.33-2.3 2.3z"/></svg>
+          <span><small>Próximamente</small><strong>Google Play</strong></span>
+        </a>
+      </div>
+    </div>
+
+    <p class="code" id="grp-code-wrap" hidden>Código del grupo: <span id="grp-code"></span></p>
+  </section>
+
+  <!-- Estado: el link llegó sin id o con un id que no tiene forma de id -->
+  <section class="card" id="state-error" hidden>
+    <div class="crest" aria-hidden="true">⚽</div>
+    <h1 class="group-name" id="err-title">Este link no funciona</h1>
+    <p class="host" id="err-text">Puede que haya llegado cortado. Copiá la
+      dirección entera del mensaje, o pedile que te la mande de nuevo.</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="/">Conocer Fulbito</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p><a href="/">www.fulbito.tech</a> · El lugar donde tu grupo de fútbol se organiza.</p>
+</footer>
+
+<script src="/group/group.js" defer></script>
+</body>
+</html>
