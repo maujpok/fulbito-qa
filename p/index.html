@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Te invitaron a jugar un partido</title>
+<meta name="description" content="Confirmá si jugás. No hace falta cuenta ni instalar nada.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F172A">
+
+<!--
+  Tarjeta genérica, de marca. Cuando la ruta /p/ pase por la función
+  (PLAN_migracion_2026-09-14.md, fase 6) estas cinco etiquetas se reemplazan
+  por las del partido: grupo, día, sede y confirmados. Ver PLAN_landing_p.
+-->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fulbito">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Te invitaron a jugar un partido">
+<meta property="og:description" content="Confirmá si jugás, sin cuenta y sin instalar nada.">
+<meta property="og:image" content="https://www.fulbito.tech/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/p.css">
+</head>
+<body>
+
+<header class="top">
+  <img src="/assets/logotipo-claro.png" alt="Fulbito" width="103" height="32">
+  <span class="env" id="env-badge" hidden>QA</span>
+</header>
+
+<main class="shell">
+
+  <!-- Estado: resolviendo el partido -->
+  <section class="card" id="state-loading" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="state-msg" id="loading-msg">Buscando el partido…</p>
+  </section>
+
+  <!-- Estado: partido válido -->
+  <section class="card" id="state-match" hidden>
+    <p class="eyebrow">Te invitaron a jugar</p>
+
+    <div class="crest" id="m-crest" aria-hidden="true">FC</div>
+    <h1 class="group-name" id="m-group">—</h1>
+
+    <ul class="meta" id="m-meta"></ul>
+
+    <div class="cupo">
+      <p class="cupo-line"><strong id="m-count">—</strong> <span id="m-cupo-text">confirmados</span></p>
+      <div class="bar" role="img" aria-labelledby="m-count"><span id="m-bar"></span></div>
+      <p class="cupo-note" id="m-full" hidden>El partido está completo.</p>
+    </div>
+
+    <!-- Quién va -->
+    <div class="roster" id="m-roster" hidden>
+      <p class="roster-label">Quiénes van</p>
+      <ul class="names" id="m-players"></ul>
+      <p class="roster-label roster-wait" id="m-wait-label" hidden>En lista de espera</p>
+      <ul class="names names-wait" id="m-waiting" hidden></ul>
+    </div>
+
+    <!-- Ya respondió: su estado -->
+    <div class="me" id="m-me" hidden>
+      <p class="me-title" id="m-me-title">—</p>
+      <p class="me-note" id="m-me-note" hidden></p>
+      <div class="actions actions-tight">
+        <button class="btn btn-ghost" type="button" id="btn-leave" hidden>Bajarme</button>
+        <button class="btn btn-primary" type="button" id="btn-rejoin" hidden>Volver a anotarme</button>
+      </div>
+    </div>
+
+    <!-- Todavía no respondió: el formulario -->
+    <form class="form" id="m-form" novalidate hidden>
+      <label class="field-label" for="m-name">¿Cómo te llamás?</label>
+      <input class="field" id="m-name" name="nombre" type="text" autocomplete="name"
+             maxlength="60" placeholder="Tu nombre" enterkeyhint="done">
+      <p class="field-error" id="m-error" role="alert" hidden></p>
+
+      <div class="actions">
+        <button class="btn btn-primary" type="submit" id="btn-going">Voy</button>
+        <button class="btn btn-ghost" type="button" id="btn-not-going">No puedo</button>
+      </div>
+      <p class="fineprint">No hace falta cuenta, mail ni instalar nada.</p>
+    </form>
+
+    <!-- Aviso de posible duplicado -->
+    <div class="dup" id="m-dup" hidden>
+      <p class="dup-title" id="m-dup-title">—</p>
+      <p class="dup-note">Si sos vos, avisale al organizador para que una los dos en la app. Tu lugar en este partido ya está tomado igual.</p>
+    </div>
+
+    <!-- Promoción, DESPUÉS de confirmar. Nunca antes. -->
+    <div class="stores-note" id="m-promo" hidden>
+      <p id="promo-text">¿Querés tener todos los partidos del grupo en el teléfono?</p>
+      <div class="stores">
+        <a class="store" id="store-ios" href="/" aria-label="Próximamente en App Store">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.36 12.68c.02-2.24 1.83-3.32 1.91-3.37-1.04-1.52-2.66-1.73-3.24-1.75-1.38-.14-2.69.81-3.39.81-.7 0-1.78-.79-2.92-.77-1.5.02-2.88.87-3.65 2.21-1.56 2.7-.4 6.7 1.12 8.89.74 1.07 1.63 2.28 2.79 2.24 1.12-.05 1.54-.72 2.9-.72s1.74.72 2.92.7c1.21-.02 1.97-1.1 2.71-2.18.85-1.25 1.2-2.46 1.22-2.52-.03-.01-2.34-.9-2.37-3.54M14.2 5.98c.62-.75 1.03-1.79.92-2.83-.89.04-1.97.59-2.6 1.34-.57.66-1.07 1.72-.94 2.73.99.08 2-.5 2.62-1.24"/></svg>
+          <span><small>Próximamente</small><strong>App Store</strong></span>
+        </a>
+        <a class="store" id="store-android" href="/" aria-label="Próximamente en Google Play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3.61 1.81 13.79 12 3.61 22.19A1.5 1.5 0 0 1 3 20.99V3.01c0-.5.24-.94.61-1.2m10.89 10.89 2.3 2.3-10.94 6.34zm3.42-3.42 2.8 1.63c1.09.62 1.09 1.63 0 2.25l-2.8 1.62-2.55-2.55zM5.86 2.66l10.94 6.33-2.3 2.3z"/></svg>
+          <span><small>Próximamente</small><strong>Google Play</strong></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Estado: el link no sirve -->
+  <section class="card" id="state-invalid" hidden>
+    <div class="crest" aria-hidden="true">⚽</div>
+    <h1 class="group-name" id="inv-title">Este enlace no está disponible</h1>
+    <p class="host" id="inv-text">Pedile al organizador que te mande uno nuevo.</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="/">Conocer Fulbito</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p><a href="/">www.fulbito.tech</a> · El lugar donde tu grupo de fútbol se organiza.</p>
+</footer>
+
+<script src="/assets/analytics.js" defer></script>
+<script src="/assets/p.js" defer></script>
+</body>
+</html>

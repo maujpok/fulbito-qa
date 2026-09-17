@@ -1,0 +1,381 @@
+/* ==========================================================================
+   Fulbito — landing pública del partido (/p/)
+   --------------------------------------------------------------------------
+   Hoja propia, como invite.css: es la primera pantalla que ve alguien que
+   llegó por WhatsApp, sin app y sin cuenta. Carga lo mínimo.
+
+   Vive en /assets/ y NO en /p/ a propósito: la regla de rewrite de la ruta
+   dinámica captura todo lo que cuelgue de /p/, así que una hoja ahí adentro
+   recibiría el HTML de la página. Ver PLAN_migracion_2026-09-14.md §2.2.
+
+   Comparte los tokens y los componentes de invite.css. Si cambia la marca,
+   cambian las dos.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/assets/fonts/manrope-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --green:        #16A34A;
+  --green-bright: #22C55E;
+  --amber:        #FBBF24;
+  --navy:         #0A1628;
+  --navy-green:   #082011;
+  --bg:           #0F172A;
+
+  --text:         #F1F5F9;
+  --text-soft:    #C3CEDD;
+  --text-muted:   #8FA0B5;
+  --line:         rgba(255, 255, 255, .10);
+  --line-strong:  rgba(255, 255, 255, .18);
+
+  --ease:         cubic-bezier(.22, .61, .36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text);
+  background:
+    radial-gradient(90% 60% at 50% 0%, rgba(22, 163, 74, .20), transparent 62%),
+    linear-gradient(170deg, var(--navy) 0%, var(--bg) 50%, var(--navy-green) 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0; line-height: 1.15; letter-spacing: -.022em; font-weight: 800; }
+p { margin: 0; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; border-radius: 8px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* --------------------------------- marco -------------------------------- */
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 26px 20px 0;
+}
+.top img { height: 32px; width: auto; }
+
+.env {
+  margin-left: 8px;
+  padding: 3px 10px;
+  border: 1px solid rgba(251, 191, 36, .45);
+  border-radius: 999px;
+  background: rgba(251, 191, 36, .14);
+  color: var(--amber);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.shell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px 40px;
+}
+
+.card {
+  width: 100%;
+  max-width: 460px;
+  padding: clamp(26px, 6vw, 38px);
+  border: 1px solid var(--line-strong);
+  border-radius: 26px;
+  background: linear-gradient(165deg, rgba(30, 41, 59, .92), rgba(15, 23, 42, .88));
+  box-shadow: 0 30px 70px rgba(0, 0, 0, .45);
+  text-align: center;
+}
+
+/* -------------------------------- estados -------------------------------- */
+
+[hidden] { display: none !important; }
+
+.spinner {
+  width: 34px; height: 34px;
+  margin: 12px auto 18px;
+  border: 3px solid rgba(255, 255, 255, .14);
+  border-top-color: var(--green-bright);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.state-msg { color: var(--text-muted); font-size: .95rem; }
+
+/* ------------------------------ invitación ------------------------------- */
+
+.eyebrow {
+  margin-bottom: 14px;
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--green-bright);
+}
+
+.crest {
+  display: grid;
+  place-items: center;
+  width: 76px; height: 76px;
+  margin: 0 auto 20px;
+  border-radius: 24px;
+  background: linear-gradient(150deg, rgba(34, 197, 94, .3), rgba(22, 163, 74, .12));
+  border: 1px solid rgba(34, 197, 94, .34);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.group-name { font-size: clamp(1.5rem, 6vw, 1.95rem); margin-bottom: 10px; }
+
+.host { color: var(--text-soft); font-size: .98rem; }
+.host strong { color: #fff; font-weight: 700; }
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0 4px;
+}
+.meta li {
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .04);
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  list-style: none;
+}
+
+/* -------------------------------- botones -------------------------------- */
+
+.actions { display: grid; gap: 12px; margin-top: 26px; }
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 17px 24px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+}
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--green-bright), var(--green));
+  box-shadow: 0 12px 28px rgba(22, 163, 74, .34);
+}
+.btn-primary:active { transform: translateY(1px); }
+.btn-ghost {
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--text-soft);
+}
+
+/* --------------------------------- tiendas ------------------------------- */
+
+.stores-note {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: .88rem;
+  color: var(--text-muted);
+}
+.stores {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+.store {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 16px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, .04);
+  color: var(--text-soft);
+  text-decoration: none;
+}
+.store svg { width: 20px; height: 20px; flex: none; }
+.store span { display: flex; flex-direction: column; line-height: 1.15; text-align: left; }
+.store small { font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); }
+.store strong { font-size: .88rem; color: var(--text); }
+
+/* --------------------------------- cupo ---------------------------------- */
+
+.cupo { margin-top: 22px; }
+.cupo-line { font-size: .95rem; color: var(--text-soft); }
+.cupo-line strong { color: #fff; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.bar {
+  height: 8px;
+  margin: 10px 0 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  overflow: hidden;
+}
+.bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--green-bright), var(--green));
+  transition: width .3s var(--ease);
+}
+.bar.is-full span { background: linear-gradient(90deg, var(--amber), #F59E0B); }
+
+.cupo-note { margin-top: 10px; font-size: .86rem; color: var(--amber); font-weight: 600; }
+
+/* -------------------------------- plantel -------------------------------- */
+
+.roster { margin-top: 22px; text-align: left; }
+.roster-label {
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.roster-wait { margin-top: 16px; }
+
+.names { display: flex; flex-wrap: wrap; gap: 7px; margin: 0; padding: 0; }
+.names li {
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .05);
+  font-size: .82rem;
+  color: var(--text-soft);
+  list-style: none;
+}
+.names-wait li { border-style: dashed; color: var(--text-muted); }
+.names li.is-me { border-color: rgba(34, 197, 94, .5); background: rgba(22, 163, 74, .16); color: #fff; font-weight: 700; }
+
+/* ------------------------------- tu estado ------------------------------- */
+
+.me {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid rgba(34, 197, 94, .3);
+  border-radius: 18px;
+  background: rgba(22, 163, 74, .13);
+}
+.me.is-wait { border-color: rgba(251, 191, 36, .34); background: rgba(251, 191, 36, .11); }
+.me.is-out  { border-color: var(--line-strong);      background: rgba(255, 255, 255, .04); }
+
+.me-title { font-weight: 800; font-size: 1.05rem; }
+.me-note { margin-top: 8px; font-size: .86rem; color: var(--text-muted); }
+
+.actions-tight { margin-top: 16px; }
+
+/* ------------------------------ formulario ------------------------------- */
+
+.form { margin-top: 26px; text-align: left; }
+
+.field-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--text-soft);
+}
+
+.field {
+  width: 100%;
+  padding: 15px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .05);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+}
+.field::placeholder { color: var(--text-muted); }
+.field:focus { border-color: rgba(34, 197, 94, .55); outline: none; }
+.field.is-bad { border-color: #F87171; }
+
+.field-error { margin-top: 9px; font-size: .85rem; color: #FCA5A5; }
+
+.fineprint { margin-top: 14px; font-size: .78rem; color: var(--text-muted); text-align: center; }
+
+/* ---------------------------- posible duplicado -------------------------- */
+
+.dup {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border: 1px dashed rgba(251, 191, 36, .45);
+  border-radius: 16px;
+  background: rgba(251, 191, 36, .09);
+  text-align: left;
+}
+.dup-title { font-weight: 700; font-size: .95rem; }
+.dup-note { margin-top: 7px; font-size: .84rem; color: var(--text-muted); }
+
+.foot {
+  padding: 0 20px 30px;
+  text-align: center;
+  font-size: .84rem;
+  color: var(--text-muted);
+}
+.foot a { color: var(--green-bright); text-decoration: none; font-weight: 600; }
+
+@media (max-width: 420px) {
+  .stores { flex-direction: column; }
+  .store { justify-content: center; }
+}
+
+/* En pantallas muy angostas el eyebrow se partía en dos líneas */
+@media (max-width: 340px) {
+  .eyebrow { font-size: .68rem; letter-spacing: .1em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

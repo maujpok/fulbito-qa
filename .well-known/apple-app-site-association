@@ -23,6 +23,14 @@
           {
             "/": "/group/*",
             "comment": "Detalle de grupo. Los genera el app al compartir (AppUrls.groupLink)"
+          },
+          {
+            "/": "/home",
+            "comment": "Inicio del shell de home. Entrada propia: /home/* NO la matchea"
+          },
+          {
+            "/": "/home/*",
+            "comment": "Las otras cuatro secciones del shell de home (grupos, carrera, partidos, perfil)"
           }
         ]
       }
