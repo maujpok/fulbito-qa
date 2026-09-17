@@ -96,6 +96,15 @@
       <p class="dup-note">Si sos vos, avisale al organizador para que una los dos en la app. Tu lugar en este partido ya está tomado igual.</p>
     </div>
 
+    <!-- Reclamar el perfil. Sólo aparece si la API devolvió un claim vigente:
+         ese link lleva el historial que la persona ya venía acumulando, así que
+         al instalar no llega a una cuenta vacía. -->
+    <div class="claim" id="m-claim" hidden>
+      <p class="claim-title">Este partido ya es parte de tu historial</p>
+      <p class="claim-note">Reclamá tu perfil y, cuando instales Fulbito, encontrás todos los partidos que jugaste con el grupo.</p>
+      <a class="btn btn-primary" id="btn-claim" href="/">Reclamar mi perfil</a>
+    </div>
+
     <!-- Promoción, DESPUÉS de confirmar. Nunca antes. -->
     <div class="stores-note" id="m-promo" hidden>
       <p id="promo-text">¿Querés tener todos los partidos del grupo en el teléfono?</p>

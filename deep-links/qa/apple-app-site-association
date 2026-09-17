@@ -31,6 +31,14 @@
           {
             "/": "/home/*",
             "comment": "Las otras cuatro secciones del shell de home (grupos, carrera, partidos, perfil)"
+          },
+          {
+            "/": "/p/",
+            "comment": "Partido publico compartido por WhatsApp (?t=). Redundante con /p/* a proposito: si el * no matcheara cero caracteres, esta entrada sostiene la forma que la API emite HOY"
+          },
+          {
+            "/": "/p/*",
+            "comment": "La forma corta /p/<token>, que el documento de producto propone. Cubre tambien /p/ y /p/?t="
           }
         ]
       }

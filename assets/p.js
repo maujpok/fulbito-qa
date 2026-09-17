@@ -60,11 +60,17 @@
   var STORE_IOS = '';
   var STORE_ANDROID = '';
 
-  // ⚠️ El contrato documenta CONFIRMED y WAITING, pero NO dice qué devuelve
-  //    `me.status` para quien respondió que no. Está preguntado. Hasta que
-  //    contesten se aceptan los valores plausibles y, ante uno desconocido, se
-  //    vuelve a mostrar el formulario en vez de inventar un estado.
-  var ESTADOS_NO_VOY = ['NOT_GOING', 'DECLINED', 'NOT_ATTENDING', 'OUT'];
+  // Quien dijo que no queda en CANCELLED (confirmado por backend el 2026-09-17).
+  // Antes de esa entrega la API devolvía `me: null` para esa persona, así que no
+  // había nada que adivinar: el estado no existía.
+  //
+  // Se siguen aceptando los otros valores plausibles, y ante uno DESCONOCIDO se
+  // vuelve a mostrar el formulario en vez de inventar un estado. Backend nos
+  // pidió expresamente dejar ese fallback puesto.
+  var ESTADOS_NO_VOY = ['CANCELLED', 'NOT_GOING', 'DECLINED', 'NOT_ATTENDING', 'OUT'];
+
+  // Hasta cuántas guestKey acepta el GET en un solo pedido (contrato: 10).
+  var MAX_CLAVES = 10;
 
   // Son TRES, no cuatro. `REVOKED` existe en el tipo pero NO LLEGA NUNCA:
   // revocar un link BORRA el token en vez de marcarlo, así que buscarlo
@@ -109,6 +115,11 @@
     if (window.fulbitoAnalytics) window.fulbitoAnalytics.track(evento, datos);
   }
 
+  function enlazarClaim() {
+    var b = $('btn-claim');
+    if (b) b.addEventListener('click', function () { track('claim_clicked'); });
+  }
+
   /* -------------------------------- entorno ------------------------------- */
 
   var host = window.location.hostname;
@@ -145,36 +156,42 @@
      confirmación y no se vuelve a emitir: si se pierde, esa persona se
      duplica en el grupo.
 
-     El contrato sugiere "una clave por host alcanza". No alcanza: quien juega
-     en dos grupos confirma en el segundo, recibe otra clave, y si se
-     sobrescribe deja de ser reconocido en el primero. Y no se puede elegir
-     cuál mandar, porque la API no expone ninguna referencia de grupo.
+     🔄 2026-09-17. La primera versión guardaba por token y una lista, porque la
+     API no exponía ninguna referencia de grupo y el GET aceptaba una sola `?g=`.
+     Backend implementó las dos cosas que faltaban, así que esto dejó de ser
+     "mejor esfuerzo" y pasa a ser exacto:
 
-     Así que se guardan las dos cosas y NUNCA se pisa nada:
-       porToken → volver al MISMO partido y ser reconocido. Siempre funciona.
-       todas    → la más reciente se manda como mejor intento en un partido
-                  nuevo. Si no matchea, la API la ignora y no pasa nada.
+       match.groupRef   una referencia opaca y estable del grupo
+       ?g= repetible    hasta 10 claves en un solo pedido
+
+     Se guardan las tres vistas y NUNCA se pisa ninguna:
+       porGrupo → la respuesta correcta para el PRÓXIMO partido del mismo grupo
+       porToken → volver al MISMO partido. Siempre funciona
+       todas    → nada se pierde, ni las claves viejas sin grupo asociado
      -------------------------------------------------------------------- */
 
   function leerAlmacen() {
+    var vacio = { porGrupo: {}, porToken: {}, todas: [] };
     try {
       var crudo = window.localStorage.getItem(ALMACEN);
       var datos = crudo ? JSON.parse(crudo) : null;
-      if (!datos || typeof datos !== 'object') return { porToken: {}, todas: [] };
+      if (!datos || typeof datos !== 'object') return vacio;
       return {
+        porGrupo: datos.porGrupo && typeof datos.porGrupo === 'object' ? datos.porGrupo : {},
         porToken: datos.porToken && typeof datos.porToken === 'object' ? datos.porToken : {},
         todas: Array.isArray(datos.todas) ? datos.todas : []
       };
     } catch (err) {
-      return { porToken: {}, todas: [] };  // modo privado: seguimos igual
+      return vacio;   // modo privado: seguimos igual
     }
   }
 
-  function guardarClave(clave) {
+  function guardarClave(clave, grupo) {
     if (!clave) return;
     try {
       var datos = leerAlmacen();
       datos.porToken[token] = clave;
+      if (grupo) datos.porGrupo[grupo] = clave;
       if (datos.todas.indexOf(clave) === -1) datos.todas.push(clave);
       window.localStorage.setItem(ALMACEN, JSON.stringify(datos));
     } catch (err) {
@@ -186,10 +203,30 @@
     return leerAlmacen().porToken[token] || '';
   }
 
-  function claveParaMandar() {
+  // Para LEER: se mandan todas las que tengamos. La que corresponda al grupo
+  // del link va a matchear; las demás la API las ignora, y una clave de otro
+  // grupo no filtra que exista — la respuesta es idéntica a no mandarla.
+  function clavesParaLeer() {
     var datos = leerAlmacen();
+    var lista = [];
+    function sumar(c) { if (c && lista.indexOf(c) === -1) lista.push(c); }
+
+    sumar(datos.porToken[token]);                    // la exacta, primero
+    for (var i = datos.todas.length - 1; i >= 0; i--) sumar(datos.todas[i]);
+    return lista.slice(0, MAX_CLAVES);
+  }
+
+  // Para ESCRIBIR hace falta UNA, y la correcta: el PUT acepta una sola. Mandar
+  // la de otro grupo crearía un jugador duplicado, así que ante la duda no se
+  // manda ninguna.
+  function claveParaEscribir(grupo) {
+    var datos = leerAlmacen();
+    if (grupo && datos.porGrupo[grupo]) return datos.porGrupo[grupo];
     if (datos.porToken[token]) return datos.porToken[token];
-    return datos.todas.length ? datos.todas[datos.todas.length - 1] : '';
+
+    // Sin grupo conocido, una sola clave guardada no tiene ambigüedad posible.
+    // Con varias, la API no dice cuál matcheó, así que no se adivina.
+    return datos.todas.length === 1 ? datos.todas[0] : '';
   }
 
   /* --------------------------------- red ---------------------------------- */
@@ -397,10 +434,48 @@
     pintarJugadores(datos.players, datos.me);
     pintarMe(datos);
 
+    // El GET no emite tokens de claim, pero devuelve el vigente si ya existe.
+    // Así alguien que vuelve al link sigue viendo el CTA.
+    if (datos.me && datos.me.claim) pintarClaim(datos.me.claim);
+
     mostrar('match');
   }
 
-  function pintarPromo() {
+  // El claim.url lo arma la API con el host del entorno. Se valida igual antes
+  // de meterlo en un href: es un dato que viene de la red, y un href acepta
+  // esquemas que no queremos (javascript:, data:). Barato y cierra la puerta.
+  function urlDeClaimValida(url) {
+    if (!url) return false;
+    try {
+      var u = new URL(url, window.location.origin);
+      if (u.protocol !== 'https:' && u.protocol !== 'http:') return false;
+      if (!ENTORNOS[u.hostname]) return false;          // sólo nuestros hosts
+      return u.pathname.indexOf('/invite/player/') === 0;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function pintarClaim(claim) {
+    var caja = $('m-claim');
+    if (!caja) return;
+
+    var url = claim && claim.url;
+    if (!urlDeClaimValida(url)) {
+      caja.hidden = true;
+      if (url && window.console) {
+        console.warn('[fulbito] claim.url descartada por no ser de un host conocido');
+      }
+      return;
+    }
+
+    $('btn-claim').href = url;
+    caja.hidden = false;
+  }
+
+  function pintarPromo(claim) {
+    pintarClaim(claim);
+
     var promo = $('m-promo');
     if (!promo) return;
     promo.hidden = false;
@@ -413,10 +488,6 @@
       texto('promo-text', 'Listo. Fulbito todavía no está en las tiendas: cuando salga, el grupo entero se organiza desde ahí.');
     }
 
-    // El §6 del pedido también quiere un CTA "Reclamá tu perfil" hacia
-    // /invite/player/?t=<token de claim>. Ese token NO viene en ninguna de las
-    // tres respuestas del contrato, y el del partido no sirve: son circuitos
-    // distintos. Queda preguntado; sin el dato no se puede construir el link.
   }
 
   function pintarDuplicado(dup) {
@@ -473,7 +544,7 @@
     bloquear(true);
 
     var cuerpo = { displayName: nombre, response: respuesta };
-    var clave = claveParaMandar();
+    var clave = claveParaEscribir(actual && actual.match && actual.match.groupRef);
     if (clave) cuerpo.guestKey = clave;
 
     pedir('/public/matches/' + encodeURIComponent(token) + '/attendance', {
@@ -484,8 +555,11 @@
       bloquear(false);
 
       if (r.status >= 200 && r.status < 300 && r.cuerpo) {
-        // Se guarda ANTES de pintar, como pide el contrato.
-        guardarClave(r.cuerpo.guestKey);
+        // Se guarda ANTES de pintar, como pide el contrato. El groupRef viene
+        // en la misma respuesta que emite la clave, así que queda archivada
+        // por grupo sin un viaje extra.
+        guardarClave(r.cuerpo.guestKey,
+          r.cuerpo.groupRef || (actual && actual.match && actual.match.groupRef));
 
         track('attendance_confirmed', { response: respuesta, status: r.cuerpo.status });
 
@@ -502,7 +576,7 @@
 
         pintar(actual);
         pintarDuplicado(r.cuerpo.possibleDuplicate);
-        pintarPromo();
+        pintarPromo(r.cuerpo.claim);
         return;
       }
 
@@ -544,7 +618,8 @@
     }
 
     bloquear(true);
-    pedir('/public/matches/' + encodeURIComponent(token) + '/attendance?g=' + encodeURIComponent(clave), {
+    pedir('/public/matches/' + encodeURIComponent(token) + '/attendance?g=' +
+      encodeURIComponent(clave), {
       method: 'DELETE'
     }).then(function (r) {
       bloquear(false);
@@ -589,9 +664,14 @@
     mostrar('loading');
     texto('loading-msg', 'Buscando el partido…');
 
-    var clave = claveParaMandar();
+    // Todas las claves en un solo pedido. Antes había que elegir una a ciegas,
+    // o pagar un request extra para saber de qué grupo era el link — y ese es
+    // justo el que paga el cold start de la API.
+    var claves = clavesParaLeer();
     var ruta = '/public/matches/' + encodeURIComponent(token) +
-      (clave ? '?g=' + encodeURIComponent(clave) : '');
+      (claves.length
+        ? '?' + claves.map(function (c) { return 'g=' + encodeURIComponent(c); }).join('&')
+        : '');
 
     return pedir(ruta, {}).then(function (r) {
       if (r.status === 404 && /Cannot GET/i.test(mensajeApi(r))) {
@@ -657,6 +737,8 @@
   $('btn-leave').addEventListener('click', bajarse);
   $('btn-rejoin').addEventListener('click', volverAAnotarse);
   $('m-name').addEventListener('input', limpiarErrorForm);
+
+  enlazarClaim();
 
   ['store-ios', 'store-android'].forEach(function (id) {
     var el = $(id);

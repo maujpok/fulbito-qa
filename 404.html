@@ -42,6 +42,28 @@
       location.replace('/group/?g=' + g[1] + extra);
       return;
     }
+
+    // Partido público, forma corta /p/{token}. El AASA declara /p/* desde el
+    // 2026-09-17 a pedido del equipo de la app, así que en un teléfono CON la
+    // app esta URL abre la app y este código no corre. Sin la app, cae acá:
+    // sin esto la forma corta seria un 404 para todo el que no la tenga.
+    var pt = location.pathname.match(/^\/p\/([^\/?#]+)\/?$/);
+    if (pt) {
+      location.replace('/p/?t=' + pt[1] + extra);
+      return;
+    }
+
+    // Las cinco secciones del shell de home. NO hay pagina web para estas
+    // rutas y es correcto: son pantallas de la app. Con la app instalada, iOS
+    // y Android interceptan y esto no corre.
+    //
+    // Sin la app —alguien que abre un mail en la computadora— hasta hoy caia
+    // en un 404 que no explicaba nada. El equipo de la app pidio esta salida
+    // el 2026-09-17. No se redirige: se cambia el mensaje, porque no hay
+    // ningun destino web al que mandarlo.
+    if (/^\/home(\/|$)/.test(location.pathname)) {
+      document.documentElement.setAttribute('data-ruta', 'app');
+    }
   })();
 </script>
 <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -60,15 +82,31 @@
   .notfound img { margin: 0 auto 26px; }
   .notfound h1 { font-size: clamp(2rem, 6vw, 3rem); margin-bottom: 14px; }
   .notfound p { color: var(--text-soft); max-width: 46ch; margin: 0 auto 30px; }
+
+  /* Una de las dos tarjetas, según la ruta. El JS del <head> marca el <html>
+     antes de que se pinte nada, así que no hay parpadeo. */
+  [data-si="app"] { display: none; }
+  [data-ruta="app"] [data-si="404"] { display: none; }
+  [data-ruta="app"] [data-si="app"] { display: block; }
 </style>
 </head>
 <body>
   <main class="notfound">
-    <div>
+    <div data-si="404">
       <img src="/assets/isotipo.png" alt="Fulbito" width="88" height="88">
       <h1>La pelota se fue afuera</h1>
       <p>Esta página no existe. Volvé al inicio y sumate como Capitán Fundador para entrar con tu grupo antes que nadie.</p>
       <a class="btn btn-primary" href="/#sumarme">Volver al inicio</a>
+    </div>
+
+    <!-- Se muestra en lugar del anterior cuando la ruta es una pantalla de la
+         app (/home/...). No es un error: es una URL que se abre en el
+         teléfono, con la app instalada. -->
+    <div data-si="app">
+      <img src="/assets/isotipo.png" alt="Fulbito" width="88" height="88">
+      <h1>Esto se abre en la app</h1>
+      <p>Este enlace lleva a una pantalla de Fulbito. Abrilo desde el teléfono que tenga la app instalada y te va a llevar derecho ahí.</p>
+      <a class="btn btn-primary" href="/">Conocer Fulbito</a>
     </div>
   </main>
 </body>
