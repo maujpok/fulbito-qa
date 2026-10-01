@@ -1,0 +1,96 @@
+# =============================================================================
+# Fulbito — configuración de deploy
+#
+# Sitio ESTÁTICO servido por CDN, con UNA sola ruta dinámica: /p/.
+# El resto son archivos del repo. Ver PLAN_migracion_2026-09-14.md.
+#
+# Los dos entornos salen del MISMO repo, en dos ramas:
+#   main → www.fulbito.tech     qa → qa.fulbito.tech
+#
+# 🔴 Las dos ramas son IDÉNTICAS, incluido este archivo. La diferencia entre
+#    entornos —los .well-known/, que declaran apps distintas— la aplica
+#    scripts/prepare-deploy.sh en el build. Si la diferencia viviera en la
+#    rama, cada merge sería un conflicto sobre los dos archivos que ya se
+#    rompieron dos veces en silencio. Ver deep-links/README.md.
+#
+# El sitio de QA se distingue por su variable FULBITO_ENV=qa (o, si no está,
+# por el nombre de la rama).
+# =============================================================================
+
+[build]
+  command = "bash scripts/prepare-deploy.sh"
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+  # La función lee la plantilla del repo en tiempo de ejecución.
+  included_files = ["p/index.html"]
+
+# -----------------------------------------------------------------------------
+# 🔴 LOS DEEP LINKS. Lo más importante de este archivo.
+#
+# Netlify NO despliega carpetas que empiezan con punto — confirmado por su
+# staff: ".well-known won't exist in the deploy as dot files are ignored". Sin
+# estas reglas el sitio quedaría sin los archivos de asociación y los deep
+# links dejarían de verificar EN SILENCIO: la página se ve igual y los links
+# dejan de abrir la app. Ya pasó dos veces en este proyecto.
+#
+# scripts/prepare-deploy.sh deja una copia en deeplinks/ (sin punto) y esto
+# la sirve en la ruta que busca el sistema operativo.
+#
+# ⚠️ La URL servida NO cambia y NO lleva extensión: sigue siendo
+#    /.well-known/apple-app-site-association, que es lo que pide Apple.
+#    Ver deep-links/README.md antes de tocar nada de esto.
+# -----------------------------------------------------------------------------
+[[redirects]]
+  from = "/.well-known/apple-app-site-association"
+  to = "/deeplinks/apple-app-site-association"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/.well-known/assetlinks.json"
+  to = "/deeplinks/assetlinks.json"
+  status = 200
+  force = true
+
+# Con el archivo servido desde una ruta propia sí podemos fijar el tipo. En
+# GitHub Pages sale application/octet-stream y Apple lo ingiere igual (medido),
+# pero application/json es lo que el equipo de la app espera ver.
+[[headers]]
+  for = "/.well-known/apple-app-site-association"
+  [headers.values]
+    Content-Type = "application/json"
+
+[[headers]]
+  for = "/.well-known/assetlinks.json"
+  [headers.values]
+    Content-Type = "application/json"
+
+# -----------------------------------------------------------------------------
+# El ápex tiene que REDIRIGIR al www, no servir el sitio.
+#
+# Hoy lo hace GitHub Pages, y eso tapa un problema real: fulbito.tech NO está
+# en ALLOWED_ORIGINS de la API de producción (medido el 2026-09-08). Si el
+# ápex sirviera la página, el JS correría desde un origen sin CORS: la API
+# respondería 200 y el navegador descartaría la respuesta — indistinguible de
+# un token inválido. Esta regla no es cosmética.
+# -----------------------------------------------------------------------------
+[[redirects]]
+  from = "https://fulbito.tech/*"
+  to = "https://www.fulbito.tech/:splat"
+  status = 301
+  force = true
+
+# -----------------------------------------------------------------------------
+# /p/ lo resuelve netlify/functions/p.mjs, que declara su propia ruta con
+# `export const config = { path: '/p/*' }`.
+#
+# Si esa forma de ruteo no estuviera disponible, /p/ cae en el archivo
+# estático —tarjeta genérica, la página funciona igual— y se activa con esto:
+#
+# [[redirects]]
+#   from = "/p/*"
+#   to = "/.netlify/functions/p"
+#   status = 200
+# -----------------------------------------------------------------------------

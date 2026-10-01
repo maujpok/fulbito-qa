@@ -16,6 +16,16 @@
      ---------------------------------------------------------------------- */
   var LEADS_ENDPOINT = '';
   var FORMSPREE_ENDPOINT = '';
+
+  /* En QA el formulario funciona completo pero no manda a ningún lado.
+     Hoy eso lo hace scripts/build-qa.sh vaciando el endpoint en la copia. Ese
+     script desaparece cuando QA pase a ser una rama de este repo (ver
+     PLAN_migracion_2026-09-14.md §5.2): sin esto, cada prueba en QA gastaría
+     uno de los 50 envíos mensuales y ensuciaría la lista de capitanes.
+
+     Se detecta por hostname y no por build, que es lo que mantiene las dos
+     ramas idénticas y hace que mergear no genere conflictos. */
+  var ES_QA = /^qa\./.test(window.location.hostname);
   var CONTACT_EMAIL = 'hola@fulbito.tech';
 
   /* ------------------------------------------------------------------------
@@ -539,6 +549,7 @@
     }
 
     function send(lead) {
+      if (ES_QA) return Promise.resolve(true);
       if (!LEADS_ENDPOINT) return sendToFormspree(lead);
       return sendToAppsScript(lead).catch(function () {
         // Respaldo: si la planilla no responde, el lead no se pierde.
